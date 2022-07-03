@@ -12,10 +12,14 @@ class ButtonPaginator extends ActionRowPaginator {
       const buttonRows = [[]];
       for (const button of this.options.buttons) {
         button.type = 'BUTTON';
-        button.customId = button.customId
-          ? this._generateCustomId(button.customId)
-          : this._generateCustomId(button.label);
-        if (!button.style) button.style = 'PRIMARY';
+        const isLink = button.url !== undefined;
+        if (!isLink) {
+          button.customId = button.customId
+            ? this._generateCustomId(button.customId)
+            : this._generateCustomId(button.label);
+        }
+        // LINK : PRIMARY - MessageButtonStyles doesn't work.
+        if (!button.style) button.style = isLink ? 5 : 1;
         if (button.row > 0 && button.row < buttonRows.length) {
           buttonRows[button.row].push(button);
         } else {
